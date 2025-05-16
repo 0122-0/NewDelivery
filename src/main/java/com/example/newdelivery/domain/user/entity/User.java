@@ -1,6 +1,7 @@
 package com.example.newdelivery.domain.user.entity;
 
 import com.example.newdelivery.common.baseEntity.BaseEntity;
+import com.example.newdelivery.domain.user.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 
