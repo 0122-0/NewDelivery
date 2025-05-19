@@ -20,6 +20,6 @@ public class UserService {
         User users = new User(email, password, name, nickname, phone, address, role);
         User savedUser = userRepository.save(users);
 
-        return new SignUpResponseDto(savedUser.getEmail(), savedUser.getPassword(),savedUser.getName(), savedUser.getNickname(), savedUser.getPhone(), savedUser.getAddress(), savedUser.getRole().name());
+        return new SignUpResponseDto(savedUser.getEmail(), savedUser.getPassword(),savedUser.getName(), savedUser.getNickname(), savedUser.getPhone(), savedUser.getAddress(), savedUser.getRole().name(), savedUser.getCreatedAt());
     }
 }
