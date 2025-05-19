@@ -47,6 +47,15 @@ public class UserService {
         return new UserResponseDto(findUserById.getEmail(), findUserById.getName(),findUserById.getNickName(),findUserById.getPhone(),findUserById.getAddress(),findUserById.getRole().name(),findUserById.getCreatedAt(),findUserById.getUpdatedAt());
     }
 
+    @Transactional
+    public UserResponseDto findUser (Long id) {
+
+        User findUserById = userRepository.findByIdOrElseThrow(id);
+        return new UserResponseDto(findUserById.getEmail(),findUserById.getName(),findUserById.getNickName(),findUserById.getPhone(),findUserById.getAddress(),findUserById.getRole().name(),findUserById.getCreatedAt(),findUserById.getUpdatedAt());
+
+    }
+
+    @Transactional
     public void deleteUser (Long id) {
 
         User findUserById = userRepository.findByIdOrElseThrow(id);

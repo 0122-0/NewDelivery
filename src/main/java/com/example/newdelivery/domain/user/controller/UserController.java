@@ -5,6 +5,8 @@ import com.example.newdelivery.domain.user.dto.request.UpdateAddressRequestDto;
 import com.example.newdelivery.domain.user.dto.request.UpdatePasswordRequestDto;
 import com.example.newdelivery.domain.user.dto.response.SignUpResponseDto;
 import com.example.newdelivery.domain.user.dto.response.UserResponseDto;
+import com.example.newdelivery.domain.user.entity.User;
+import com.example.newdelivery.domain.user.repository.UserRepository;
 import com.example.newdelivery.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     //회원 가입
     @PostMapping("/signUp")
@@ -49,6 +52,14 @@ public class UserController {
         UserResponseDto userResponseDto = userService.updateAddress(id, requestDto);
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDto> findUser (@PathVariable Long id){
+
+        UserResponseDto responseDto = userService.findUser(id);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
