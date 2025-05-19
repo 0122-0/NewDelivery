@@ -26,8 +26,23 @@ public class Menu extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private  String content;
+    private String content;
 
     @Column(nullable = false)
     private Integer price;
+
+    public Menu(Store store, String name, String content, Integer price) {
+        this.store = store;
+        this.name = name;
+        this.content = content;
+        this.price = price;
+    }
+
+    public void update(String newName, String newContent, Integer newPrice) {
+        this.name = newName;
+        this.content = newContent;
+        this.price = newPrice;
+    }
+
+
 }
