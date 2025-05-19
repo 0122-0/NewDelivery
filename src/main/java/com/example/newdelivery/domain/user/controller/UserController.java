@@ -1,9 +1,11 @@
 package com.example.newdelivery.domain.user.controller;
 
 import com.example.newdelivery.domain.user.dto.SignUpRequestDto;
+import com.example.newdelivery.domain.user.dto.SignUpResponseDto;
 import com.example.newdelivery.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,10 +21,18 @@ public class UserController {
 
     //회원 가입
     @PostMapping("/signUp")
-    public ResponseEntity<SignUpRequestDto> signUp (@Valid @RequestBody SignUpRequestDto requestDto){
+    public ResponseEntity<SignUpResponseDto> signUp (@Valid @RequestBody SignUpRequestDto requestDto){
 
-        SignUpRequestDto signUpRequestDto = userService.signUp;
+        SignUpResponseDto SignUpResponseDto = userService.signUp(
+                requestDto.getEmail(),
+                requestDto.getPassword(),
+                requestDto.getName(),
+                requestDto.getNickname(),
+                requestDto.getPhone(),
+                requestDto.getAddress(),
+                requestDto.getRole()
+        );
 
-        return ResponseEntity
+        return new ResponseEntity<>(SignUpResponseDto, HttpStatus.CREATED);
     }
 }

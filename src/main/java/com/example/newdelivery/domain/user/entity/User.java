@@ -3,12 +3,15 @@ package com.example.newdelivery.domain.user.entity;
 import com.example.newdelivery.common.baseEntity.BaseEntity;
 import com.example.newdelivery.domain.user.enums.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @Table(name = "user")
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class User extends BaseEntity {
 
     @Id
@@ -20,6 +23,9 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String nickname;
@@ -34,7 +40,17 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Role role;
 
-//    // 한 명의 owner 가 여러 가게
+    public User(String email, String password, String name, String nickname, String phone, String address, String role) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.phone = phone;
+        this.address = address;
+        this.role = Role.valueOf(role);
+    }
+
+    //    // 한 명의 owner 가 여러 가게
 //    @OneToMany(mappedBy = "owner")
 //    private List<Store> stores = new ArrayList<>();
 //
