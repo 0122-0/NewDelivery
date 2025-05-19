@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Entity
 @Table(name = "user")
@@ -30,7 +28,7 @@ public class User extends BaseEntity {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private String nickname;
+    private String nickName;
 
     @Column(nullable = false, unique = true)
     private String phone;
@@ -42,14 +40,18 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Role role;
 
-    public User(String email, String password, String name, String nickname, String phone, String address, String role) {
+    public User(String email, String password, String name, String nickName, String phone, String address, String role) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.nickname = nickname;
+        this.nickName = nickName;
         this.phone = phone;
         this.address = address;
         this.role = Role.valueOf(role);
+    }
+
+    public void updatePassword (String newPassword) {
+        this.password = newPassword;
     }
 
     //    // 한 명의 owner 가 여러 가게

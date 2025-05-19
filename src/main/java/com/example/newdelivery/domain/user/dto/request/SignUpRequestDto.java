@@ -1,4 +1,4 @@
-package com.example.newdelivery.domain.user.dto;
+package com.example.newdelivery.domain.user.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -18,7 +18,7 @@ public class SignUpRequestDto {
     private final String name;
 
     @NotBlank(message = "별명은 필수 입력값 입니다.")
-    private final String nickname;
+    private final String nickName;
 
     @NotBlank(message = "전화번호는 필수 입력값 입니다.")
     private final String phone;
@@ -30,11 +30,11 @@ public class SignUpRequestDto {
     private final String Role;
 
 
-    public SignUpRequestDto(String email, String password, String name, String nickname, String phone, String address, String role) {
+    public SignUpRequestDto(String email, String password, String name, String nickName, String phone, String address, String role) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.nickname = nickname;
+        this.nickName = nickName;
         this.phone = phone;
         this.address = address;
         this.Role = role;
