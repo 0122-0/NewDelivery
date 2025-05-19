@@ -1,7 +1,6 @@
 package com.example.newdelivery.domain.user.service;
 
 import com.example.newdelivery.domain.user.dto.request.UpdateAddressRequestDto;
-import com.example.newdelivery.domain.user.dto.request.UpdatePasswordRequestDto;
 import com.example.newdelivery.domain.user.dto.response.SignUpResponseDto;
 import com.example.newdelivery.domain.user.dto.response.UserResponseDto;
 import com.example.newdelivery.domain.user.entity.User;
@@ -48,5 +47,10 @@ public class UserService {
         return new UserResponseDto(findUserById.getEmail(), findUserById.getName(),findUserById.getNickName(),findUserById.getPhone(),findUserById.getAddress(),findUserById.getRole().name(),findUserById.getCreatedAt(),findUserById.getUpdatedAt());
     }
 
+    public void deleteUser (Long id) {
 
+        User findUserById = userRepository.findByIdOrElseThrow(id);
+
+        userRepository.delete(findUserById);
+    }
 }

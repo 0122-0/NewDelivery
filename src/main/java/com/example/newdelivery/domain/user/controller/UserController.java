@@ -7,7 +7,6 @@ import com.example.newdelivery.domain.user.dto.response.SignUpResponseDto;
 import com.example.newdelivery.domain.user.dto.response.UserResponseDto;
 import com.example.newdelivery.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,11 +44,18 @@ public class UserController {
     }
 
     @PutMapping("/{id}/address")
-
     public ResponseEntity<UserResponseDto> updateAddress (@PathVariable Long id, @RequestBody UpdateAddressRequestDto requestDto){
 
         UserResponseDto userResponseDto = userService.updateAddress(id, requestDto);
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+
+        userService.deleteUser(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
