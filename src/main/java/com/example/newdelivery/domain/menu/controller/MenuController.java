@@ -1,9 +1,9 @@
 package com.example.newdelivery.domain.menu.controller;
 
 
-import com.example.newdelivery.domain.menu.dto.MenuRequestDto;
-import com.example.newdelivery.domain.menu.dto.MenuResponseDto;
-import com.example.newdelivery.domain.menu.dto.MenuUpdateRequestDto;
+import com.example.newdelivery.domain.menu.dto.request.MenuRequestDto;
+import com.example.newdelivery.domain.menu.dto.response.MenuResponseDto;
+import com.example.newdelivery.domain.menu.dto.request.MenuUpdateRequestDto;
 import com.example.newdelivery.domain.menu.service.MenuService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

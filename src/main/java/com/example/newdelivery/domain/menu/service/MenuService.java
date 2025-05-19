@@ -1,8 +1,8 @@
 package com.example.newdelivery.domain.menu.service;
 
-import com.example.newdelivery.domain.menu.dto.MenuRequestDto;
-import com.example.newdelivery.domain.menu.dto.MenuResponseDto;
-import com.example.newdelivery.domain.menu.dto.MenuUpdateRequestDto;
+import com.example.newdelivery.domain.menu.dto.request.MenuRequestDto;
+import com.example.newdelivery.domain.menu.dto.response.MenuResponseDto;
+import com.example.newdelivery.domain.menu.dto.request.MenuUpdateRequestDto;
 import com.example.newdelivery.domain.menu.entity.Menu;
 import com.example.newdelivery.domain.menu.repository.MenuRepositoy;
 import com.example.newdelivery.domain.user.repository.UserRepository;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.catalina.Store;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 

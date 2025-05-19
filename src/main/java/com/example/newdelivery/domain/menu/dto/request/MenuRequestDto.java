@@ -1,4 +1,4 @@
-package com.example.newdelivery.domain.menu.dto;
+package com.example.newdelivery.domain.menu.dto.request;
 
 
 import jakarta.validation.constraints.NotBlank;
