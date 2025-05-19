@@ -54,6 +54,10 @@ public class User extends BaseEntity {
         this.password = newPassword;
     }
 
+    public void updateAddress (String newAddress) {
+        this.address = newAddress;
+    }
+
     //    // 한 명의 owner 가 여러 가게
 //    @OneToMany(mappedBy = "owner")
 //    private List<Store> stores = new ArrayList<>();

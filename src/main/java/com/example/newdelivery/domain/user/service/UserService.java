@@ -1,7 +1,9 @@
 package com.example.newdelivery.domain.user.service;
 
+import com.example.newdelivery.domain.user.dto.request.UpdateAddressRequestDto;
 import com.example.newdelivery.domain.user.dto.request.UpdatePasswordRequestDto;
 import com.example.newdelivery.domain.user.dto.response.SignUpResponseDto;
+import com.example.newdelivery.domain.user.dto.response.UserResponseDto;
 import com.example.newdelivery.domain.user.entity.User;
 import com.example.newdelivery.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -35,4 +37,16 @@ public class UserService {
 
         findUserById.updatePassword(newPassword);
     }
+
+    @Transactional
+    public UserResponseDto updateAddress (Long id, UpdateAddressRequestDto requestDto) {
+
+        User findUserById = userRepository.findByIdOrElseThrow(id);
+
+        findUserById.updateAddress(requestDto.getAddress());
+
+        return new UserResponseDto(findUserById.getEmail(), findUserById.getName(),findUserById.getNickName(),findUserById.getPhone(),findUserById.getAddress(),findUserById.getRole().name(),findUserById.getCreatedAt(),findUserById.getUpdatedAt());
+    }
+
+
 }

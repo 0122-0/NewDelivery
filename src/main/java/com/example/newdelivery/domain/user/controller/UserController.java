@@ -1,8 +1,10 @@
 package com.example.newdelivery.domain.user.controller;
 
 import com.example.newdelivery.domain.user.dto.request.SignUpRequestDto;
+import com.example.newdelivery.domain.user.dto.request.UpdateAddressRequestDto;
 import com.example.newdelivery.domain.user.dto.request.UpdatePasswordRequestDto;
 import com.example.newdelivery.domain.user.dto.response.SignUpResponseDto;
+import com.example.newdelivery.domain.user.dto.response.UserResponseDto;
 import com.example.newdelivery.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
@@ -40,5 +42,14 @@ public class UserController {
         userService.updatePassword(id, requestDto.getOldPassword(), requestDto.getNewPassword());
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/address")
+
+    public ResponseEntity<UserResponseDto> updateAddress (@PathVariable Long id, @RequestBody UpdateAddressRequestDto requestDto){
+
+        UserResponseDto userResponseDto = userService.updateAddress(id, requestDto);
+
+        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 }
