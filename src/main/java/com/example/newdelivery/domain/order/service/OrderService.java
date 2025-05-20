@@ -8,6 +8,8 @@ import com.example.newdelivery.domain.order.dto.response.OrderStatusResponseDto;
 import com.example.newdelivery.domain.order.entity.Order;
 import com.example.newdelivery.domain.order.enums.OrderStatus;
 import com.example.newdelivery.domain.order.repository.OrderRepository;
+import com.example.newdelivery.domain.store.Entity.Store;
+import com.example.newdelivery.domain.store.Repository.StoreRepository;
 import com.example.newdelivery.domain.user.entity.User;
 import com.example.newdelivery.domain.user.repository.UserRepository;
 import com.example.newdelivery.global.exception.ApiException;
@@ -50,7 +52,7 @@ public class OrderService {
 
          // 가게 영업시간에만 주문 가능
         LocalTime now = LocalTime.now();
-        if (now.isBefore(store.getOpeningTime()) || now.isAfter(store.getClosingTime())) {
+        if (now.isBefore(store.getOpenTime()) || now.isAfter(store.getCloseTime())) {
             throw new ApiException(HttpStatus.BAD_REQUEST, ErrorType.INVALID_PARAMETER, "영업시간이 아닙니다.");
         }
 
@@ -62,7 +64,7 @@ public class OrderService {
         int totalPrice = (menu.getPrice() + totalOptionPrice) * dto.getQuantity();
 
         // 가게에서 설정한 최소 주문 금액을 만족해야 주문이 가능
-        if (totalPrice < store.getMinOrderPrice()) {
+        if (totalPrice < store.getMinimumOrder()) {
             throw new ApiException(HttpStatus.BAD_REQUEST, ErrorType.INVALID_PARAMETER, String.format("최소 주문 금액은 %d원입니다.", store.getMinOrderPrice()));
         }
 

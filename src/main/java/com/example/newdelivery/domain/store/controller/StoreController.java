@@ -1,4 +1,4 @@
-package com.example.newdelivery.controller;
+package com.example.newdelivery.domain.store.controller;
 
 import com.example.newdelivery.domain.store.Dto.StoreRequestDto;
 import com.example.newdelivery.domain.store.Dto.StoreResponseDto;
