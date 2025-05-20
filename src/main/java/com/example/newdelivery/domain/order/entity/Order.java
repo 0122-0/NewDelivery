@@ -1,13 +1,14 @@
 package com.example.newdelivery.domain.order.entity;
 
 import com.example.newdelivery.common.baseEntity.BaseEntity;
+import com.example.newdelivery.domain.menu.entity.Menu;
 import com.example.newdelivery.domain.order.enums.OrderStatus;
+import com.example.newdelivery.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.awt.*;
 
 @Getter
 @Entity

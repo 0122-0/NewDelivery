@@ -18,8 +18,8 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderResponseDto> createOrder(@Valid @RequestBody OrderCreateRequest dto) {
-        return ResponseEntity.ok(orderService.createOrder(dto));
+    public ResponseEntity<OrderResponseDto> createOrder(Long userId, @Valid @RequestBody OrderCreateRequest dto) {
+        return ResponseEntity.ok(orderService.createOrder(userId, dto));
     }
 
     @PatchMapping("/{orderId}/cancel")
