@@ -1,6 +1,7 @@
 package com.example.newdelivery.domain.store.Entity;
 
 import com.example.newdelivery.common.baseEntity.BaseEntity;
+import com.example.newdelivery.domain.store.Dto.StoreRequestDto;
 import com.example.newdelivery.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -56,7 +57,7 @@ public class Store extends BaseEntity {
     private User user;
 
 
-    public Store(Long id, String name, String content, String address, LocalTime openTime, LocalTime closeTime, Long minimumOrder, User user){
+    public Store(Long id, String name, String content, String address, LocalTime openTime, LocalTime closeTime, Long minimumOrder, User user) {
         this.id = id;
         this.name = name;
         this.content = content;
@@ -67,7 +68,7 @@ public class Store extends BaseEntity {
         this.user = user;
     }
 
-    public Store(String name, String content, String address, LocalTime openTime, LocalTime closeTime, Long minimumOrder, User user){
+    public Store(String name, String content, String address, LocalTime openTime, LocalTime closeTime, Long minimumOrder, User user) {
         this.name = name;
         this.content = content;
         this.address = address;
@@ -76,4 +77,24 @@ public class Store extends BaseEntity {
         this.minimumOrder = minimumOrder;
         this.user = user;
     }
+
+    public Store(StoreRequestDto storeRequestDto) {
+        this.name = storeRequestDto.getName();
+        this.content = storeRequestDto.getContent();
+        this.address = storeRequestDto.getAddress();
+        this.openTime = storeRequestDto.getOpenTime();
+        this.closeTime = storeRequestDto.getCloseTime();
+        this.minimumOrder = storeRequestDto.getMinimumOrder();
+    }
+
+    public void update(StoreRequestDto storeRequestDto) {
+        this.name = storeRequestDto.getName();
+        this.content = storeRequestDto.getContent();
+        this.address = storeRequestDto.getAddress();
+        this.openTime = storeRequestDto.getOpenTime();
+        this.closeTime = storeRequestDto.getCloseTime();
+        this.minimumOrder = storeRequestDto.getMinimumOrder();
+    }
 }
+
+
