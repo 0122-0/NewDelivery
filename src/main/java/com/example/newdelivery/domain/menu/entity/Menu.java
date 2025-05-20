@@ -1,6 +1,7 @@
 package com.example.newdelivery.domain.menu.entity;
 
 import com.example.newdelivery.common.baseEntity.BaseEntity;
+import com.example.newdelivery.domain.store.Entity.Store;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
