@@ -12,10 +12,11 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.newdelivery.domain.review.dto.ReviewRequestDto;
 import com.example.newdelivery.domain.review.dto.ReviewResponseDto;
 import com.example.newdelivery.domain.review.entity.Review;
-import com.example.newdelivery.repository.ReviewRepository;
-import com.example.newdelivery.repository.UserRepository;
+import com.example.newdelivery.domain.review.repository.ReviewRepository;
+import com.example.newdelivery.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +56,9 @@ public class ReviewService {
 
 		Review review = Review.builder()
 			.orderId(orderId)
+			.userId(userId)
 			.menuId(menu.getMenuId())
+			.storeId(store.getId())
 			.rating(reviewRequestDto.getRating())
 			.content(reviewRequestDto.getContent())
 			.build();
@@ -66,7 +69,10 @@ public class ReviewService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<ReviewResponseDto> getStoreReviews(Integer minRating, Integer maxRating, Pageable pageable) {
+	public Page<ReviewResponseDto> getStoreReviews(Long storeId, Integer minRating, Integer maxRating, Pageable pageable) {
+		if (!reviewRepository.existsByStoreId(storeId)) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 가게입니다.");
+		}
 
 		int min = minRating != null ? minRating : 1;
 		int max = maxRating != null ? maxRating : 5;
@@ -75,7 +81,7 @@ public class ReviewService {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 별점 범위입니다.");
 		}
 
-		Page<Review> reviews = reviewRepository.findByStoreIdAndRatingBetweenOrderByCreatedAtDesc(min, max, pageable);
+		Page<Review> reviews = reviewRepository.findByStoreIdAndRatingBetweenOrderByCreatedAtDesc(storeId, min, max, pageable);
 
 		return reviews.map(review -> {
 			Menu menu = menuRepository.findById(review.getMenuId()).orElseThrow(() ->

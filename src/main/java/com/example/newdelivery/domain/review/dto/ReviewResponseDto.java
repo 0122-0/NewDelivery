@@ -20,6 +20,10 @@ public class ReviewResponseDto {
 
 	private Long orderId;
 
+	private Long storeId;
+
+	private String menuName;
+
 	private int rating;
 
 	private String content;
@@ -30,6 +34,8 @@ public class ReviewResponseDto {
 		return ReviewResponseDto.builder()
 			.id(review.getId())
 			.orderId(review.getOrderId())
+			.storeId(review.getStoreId())
+			.menuName(menuName)
 			.rating(review.getRating())
 			.content(review.getContent())
 			.createdAt(review.getCreatedAt())

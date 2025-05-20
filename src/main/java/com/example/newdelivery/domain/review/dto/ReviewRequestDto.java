@@ -17,4 +17,5 @@ public class ReviewRequestDto {
 
 	private Long menuId;
 
+	private Long storeId;
 }

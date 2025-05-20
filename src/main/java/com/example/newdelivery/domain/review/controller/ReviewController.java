@@ -24,15 +24,15 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 public class ReviewController {
 	private final ReviewService reviewService;
-	// private final JwtUtil jwtUtil;
+	private final JwtUtil jwtUtil;
 	@PostMapping("/orders/{orderId}/reviews")
 	public ResponseEntity<ReviewResponseDto> createReview(
 		@PathVariable Long orderId,
 		@RequestBody ReviewRequestDto reviewRequestDto,
 		HttpServletRequest request
 	) {
-		// Long userId = jwtUtil.getIdFromRequest(request);
-		// ReviewResponseDto responseDto = reviewService.createReview(orderId, reviewRequestDto, userId);
+		Long userId = jwtUtil.getIdFromRequest(request);
+		ReviewResponseDto responseDto = reviewService.createReview(orderId, reviewRequestDto, userId);
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
 	@GetMapping("/stores/{storeId}/reviews")
@@ -42,7 +42,7 @@ public class ReviewController {
 		@RequestParam(required = false) Integer maxRating,
 		Pageable pageable
 	) {
-		Page<ReviewResponseDto> reviews = reviewService.getStoreReviews(minRating, maxRating, pageable);
+		Page<ReviewResponseDto> reviews = reviewService.getStoreReviews(storeId, minRating, maxRating, pageable);
 		return ResponseEntity.ok(reviews);
 	}
 }
