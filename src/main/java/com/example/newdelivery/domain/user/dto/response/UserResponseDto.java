@@ -17,6 +17,7 @@ public class UserResponseDto {
     private final LocalDateTime updatedAt;
 
     public UserResponseDto(String email, String name, String nickName, String phone, String address, String role, LocalDateTime createdAt, LocalDateTime updatedAt) {
+
         this.email = email;
         this.name = name;
         this.nickName = nickName;

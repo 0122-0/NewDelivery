@@ -1,12 +1,12 @@
 package com.example.newdelivery.domain.user.controller;
 
+
+
 import com.example.newdelivery.domain.user.dto.request.SignUpRequestDto;
 import com.example.newdelivery.domain.user.dto.request.UpdateAddressRequestDto;
 import com.example.newdelivery.domain.user.dto.request.UpdatePasswordRequestDto;
 import com.example.newdelivery.domain.user.dto.response.SignUpResponseDto;
 import com.example.newdelivery.domain.user.dto.response.UserResponseDto;
-import com.example.newdelivery.domain.user.entity.User;
-import com.example.newdelivery.domain.user.repository.UserRepository;
 import com.example.newdelivery.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
     //회원 가입
     @PostMapping("/signUp")
