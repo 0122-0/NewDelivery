@@ -10,8 +10,4 @@ import java.util.List;
 public interface MenuRepositoy extends JpaRepository<Menu,Long> {
 
     List<Menu> findByStore(Long storeId);
-
-    default Menu findByIdOrElseThrow(Long id){
-        return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
-    }
 }
