@@ -1,9 +1,5 @@
 package com.example.newdelivery.domain.user.controller;
 
-
-public class UserController {
-}
-=======
 import com.example.newdelivery.domain.user.dto.request.SignUpRequestDto;
 import com.example.newdelivery.domain.user.dto.request.UpdateAddressRequestDto;
 import com.example.newdelivery.domain.user.dto.request.UpdatePasswordRequestDto;
