@@ -18,7 +18,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderResponseDto> createOrder(Long userId, @Valid @RequestBody OrderCreateRequest dto) {
+    public ResponseEntity<OrderResponseDto> createOrder(@PathVariable Long userId, @Valid @RequestBody OrderCreateRequest dto) {
         return ResponseEntity.ok(orderService.createOrder(userId, dto));
     }
 

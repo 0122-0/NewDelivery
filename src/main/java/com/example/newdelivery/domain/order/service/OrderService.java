@@ -46,7 +46,7 @@ public class OrderService {
         Menu menu = menuRepository.findById(dto.getMenuId())
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, ErrorType.INVALID_PARAMETER, "메뉴를 찾을 수 없습니다."));
 
-        List<MenuOptions> menuOptions = menuOptionsRepository.findByMenuId(menu.getId());
+        List<Menu> menu = menuRepository.findById(menu.getId());
 
          // 가게 영업시간에만 주문 가능
         LocalTime now = LocalTime.now();
@@ -71,7 +71,7 @@ public class OrderService {
                 .user(user)
                 .store(store)
                 .menu(menu)
-                .count(dto.getCount())
+                .quantity(dto.getQuantity())
                 .totalPrice(totalPrice)
                 .orderStatus(OrderStatus.PENDING) // 기본값 설정
                 .updatedAt(LocalDateTime.now())
@@ -83,7 +83,7 @@ public class OrderService {
                 savedOrder.getId(),
                 store.getId(),
                 savedOrder.getMenu().getId(),
-                savedOrder.getCount(),
+                savedOrder.getQuantity(),
                 savedOrder.getTotalPrice(),
                 savedOrder.getUpdatedAt()
         );
@@ -91,10 +91,10 @@ public class OrderService {
 
     // 사용자 주문 취소
     @Transactional
-    public OrderStatusResponseDto cancelOrder(Long userId, Long orderId) {
+    public OrderStatusResponseDto cancelOrder(Long orderId) {
         Order order = getOrderById(orderId);
 
-        validateUserOrder(order, userId);
+        validateUserOrder(order;
 
         if (!OrderStatus.PENDING.equals(order.getOrderStatus())) {
             throw new ApiException(HttpStatus.BAD_REQUEST, ErrorType.INVALID_PARAMETER,"조리 중인 주문은 취소할 수 없습니다.");
@@ -107,7 +107,7 @@ public class OrderService {
 
     // 오너 주문 상태 변경
     @Transactional
-    public OrderStatusResponseDto changeOrderStatus(UserType userType, Long orderId, OrderStatus newStatus ) {
+    public OrderStatusResponseDto changeOrderStatus(Long orderId, OrderStatus newStatus ) {
 
         validateOwnerOrder(userType);
 
