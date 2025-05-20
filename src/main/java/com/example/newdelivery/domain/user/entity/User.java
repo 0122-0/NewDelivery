@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Getter
 @Entity
 @Table(name = "user")
@@ -58,7 +59,7 @@ public class User extends BaseEntity {
         this.address = newAddress;
     }
 
-    //    // 한 명의 owner 가 여러 가게
+//        // 한 명의 owner 가 여러 가게
 //    @OneToMany(mappedBy = "owner")
 //    private List<Store> stores = new ArrayList<>();
 //
