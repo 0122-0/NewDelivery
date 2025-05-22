@@ -1,0 +1,28 @@
+package com.example.newdelivery.domain.auth.dto.response;
+
+import lombok.Getter;
+
+import java.time.LocalDateTime;
+
+@Getter
+public class SignupResponse {
+
+    private final String email;
+
+    private final String name;
+    private final String nickName;
+    private final String phone;
+    private final String address;
+    private final String role;
+    private final LocalDateTime createdAt;
+
+    public SignupResponse(String email, String name, String nickName, String phone, String address, String role, LocalDateTime createdAt) {
+        this.email = email;
+        this.name = name;
+        this.nickName = nickName;
+        this.phone = phone;
+        this.address = address;
+        this.role = role;
+        this.createdAt = createdAt;
+    }
+}
