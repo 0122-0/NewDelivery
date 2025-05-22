@@ -2,6 +2,7 @@ package com.example.newdelivery.domain.store.Dto;
 
 
 import com.example.newdelivery.domain.store.Entity.Store;
+import com.example.newdelivery.domain.user.entity.User;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -31,16 +32,23 @@ public class StoreRequestDto {
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime closeTime;
 
-    @Min(value = 15000, message = "최소 주문 금액은 15000이상이여야 합니다.")
-    private Long minimumOrder;
-
     public StoreRequestDto(Store store) {
         this.name = store.getName();
         this.content = store.getContent();
         this.address = store.getAddress();
         this.openTime = store.getOpenTime();
         this.closeTime = store.getCloseTime();
-        this.minimumOrder = store.getMinimumOrder();
+    }
+
+    public Store toEntity(User owner){
+        return Store.builder()
+                .name(this.name)
+                .content(this.content)
+                .address(this.address)
+                .openTime(this.openTime)
+                .closeTime(this.closeTime)
+                .owner(owner)
+                .build();
     }
 
 }

@@ -1,11 +1,18 @@
 package com.example.newdelivery.domain.user.entity;
 
 import com.example.newdelivery.common.baseEntity.BaseEntity;
+import com.example.newdelivery.domain.order.entity.Order;
+import com.example.newdelivery.domain.review.entity.Review;
+import com.example.newdelivery.domain.store.Entity.Store;
 import com.example.newdelivery.domain.user.enums.Role;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -41,6 +48,19 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Role role;
 
+    // 한 명의 owner 가 여러 가게
+    @OneToMany(mappedBy = "owner")
+    @JsonManagedReference
+    private List<Store> stores = new ArrayList<>();
+
+    // 한 명의 유저가 여러가지 리뷰를 남김
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews = new ArrayList<>();
+
+    // 한 명의 유저가 여러 주문 가능
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders = new ArrayList<>();
+
     public User(String email, String password, String name, String nickName, String phone, String address, String role) {
         this.email = email;
         this.password = password;
@@ -58,18 +78,6 @@ public class User extends BaseEntity {
     public void updateAddress (String newAddress) {
         this.address = newAddress;
     }
-
-//        // 한 명의 owner 가 여러 가게
-//    @OneToMany(mappedBy = "owner")
-//    private List<Store> stores = new ArrayList<>();
-//
-//    // 한 명의 유저가 여러가지 리뷰를 남김
-//    @OneToMany(mappedBy = "user")
-//    private List<Review> reviews = new ArrayList<>();
-//
-//    // 한 명의 유저가 여러 주문 가능
-//    @OneToMany(mappedBy = "user")
-//    private List<Order> orders = new ArrayList<>();
 
 
 }

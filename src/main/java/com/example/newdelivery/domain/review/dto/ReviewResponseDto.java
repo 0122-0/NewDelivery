@@ -20,8 +20,6 @@ public class ReviewResponseDto {
 
 	private Long orderId;
 
-	private Long storeId;
-
 	private String menuName;
 
 	private int rating;
@@ -33,8 +31,7 @@ public class ReviewResponseDto {
 	public static ReviewResponseDto from(Review review, String menuName) {
 		return ReviewResponseDto.builder()
 			.id(review.getId())
-			.orderId(review.getOrderId())
-			.storeId(review.getStoreId())
+			.orderId(review.getId())
 			.menuName(menuName)
 			.rating(review.getRating())
 			.content(review.getContent())
@@ -42,3 +39,4 @@ public class ReviewResponseDto {
 			.build();
 	}
 }
+

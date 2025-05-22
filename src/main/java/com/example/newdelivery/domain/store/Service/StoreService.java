@@ -5,6 +5,8 @@ import com.example.newdelivery.domain.store.Dto.StoreRequestDto;
 import com.example.newdelivery.domain.store.Dto.StoreResponseDto;
 import com.example.newdelivery.domain.store.Entity.Store;
 import com.example.newdelivery.domain.store.Repository.StoreRepository;
+import com.example.newdelivery.domain.user.entity.User;
+import com.example.newdelivery.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,27 +19,42 @@ import java.util.List;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+    private final UserRepository userRepository;
+
     // 생성
     @Transactional
-    public StoreResponseDto createStoreService(StoreRequestDto storeRequestDto) {
-        Store store = new Store(storeRequestDto);
+    public StoreResponseDto createStoreService(Long userId, StoreRequestDto storeRequestDto) {
+
+        User owner = userRepository.findByIdOrElseThrow(userId);
+
+        Store store = storeRequestDto.toEntity(owner);
+
         storeRepository.save(store);
-        return null;
+
+        return StoreResponseDto.from(storeRepository.save(store));
     }
 
     // 수정
     @Transactional
-    public StoreRequestDto updateStoreService(Long storeId, StoreRequestDto storeRequestDto){
+    public StoreResponseDto updateStoreService(Long userId, Long storeId, StoreRequestDto storeRequestDto){
+
+        User user = userRepository.findByIdOrElseThrow(userId);
+
         Store store = storeRepository.findById(storeId).orElseThrow();
+
         store.update(storeRequestDto);
-        storeRepository.save(store);
 
-        return new StoreRequestDto(store);
+        Store savedStore = storeRepository.save(store);
+
+        return StoreResponseDto.from(savedStore);
+
     }
-
     // 삭제
     @Transactional
-    public void deleteStoreService(Long storeId) throws IllegalAccessException {
+    public void deleteStoreService(Long userId, Long storeId) throws IllegalAccessException {
+
+        User user = userRepository.findByIdOrElseThrow(userId);
+
         Store store = storeRepository.findById(storeId).orElseThrow(IllegalAccessException::new);
         storeRepository.delete(store);
 
@@ -51,9 +68,12 @@ public class StoreService {
 
     // 단건 조회
     @Transactional
-    public StoreRequestDto checkOneStoreService(Long storeId) throws IllegalAccessException {
+    public StoreResponseDto checkOneStoreService(Long userId, Long storeId) throws IllegalAccessException {
+
+        User user = userRepository.findByIdOrElseThrow(userId);
+
         Store store = storeRepository.findById(storeId).orElseThrow(IllegalAccessException::new);
 
-        return new StoreRequestDto(store);
+        return StoreResponseDto.from(store);
     }
 }

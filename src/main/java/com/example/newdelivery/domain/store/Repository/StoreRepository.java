@@ -8,5 +8,8 @@ import org.springframework.stereotype.Repository;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
+    default Store findStoreByIdOrElseThrow(Long storeId){
+        return findById(storeId).orElseThrow(()->new RuntimeException("가게를 찾을 수 없습니다."));
+    }
 
 }

@@ -3,6 +3,7 @@ package com.example.newdelivery.domain.order.entity;
 import com.example.newdelivery.common.baseEntity.BaseEntity;
 import com.example.newdelivery.domain.menu.entity.Menu;
 import com.example.newdelivery.domain.order.enums.OrderStatus;
+import com.example.newdelivery.domain.store.Entity.Store;
 import com.example.newdelivery.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -36,13 +37,9 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "menu_id", nullable = false)
     private Menu menu;
 
-    // 메뉴 개수
+    //가격
     @Column(nullable = false)
-    private int quantity;
-
-    // 총 가격
-    @Column(nullable = false)
-    private int totalPrice;
+    private int Price;
 
     // 주문 상태
     @Column(nullable = false)
@@ -50,12 +47,17 @@ public class Order extends BaseEntity {
     private OrderStatus orderstatus;
 
     @Builder
-    public Order(User user, Store store, Menu menu, int quantity, int totalPrice, OrderStatus orderstatus) {
+    public Order(User user, Store store, Menu menu, int Price, OrderStatus orderstatus) {
         this.user = user;
         this.store = store;
         this.menu = menu;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
-        this.orderstatus = OrderStatus.PENDING; // 기본값 설정
+        this.Price = Price;
+        this.orderstatus = OrderStatus.PENDING;
+
+        // 기본값 설정
+    }
+
+    public void updateOrderStatus(OrderStatus orderStatus){
+        this.orderstatus = orderStatus;
     }
 }

@@ -8,8 +8,6 @@ import lombok.Getter;
 @Getter
 public class MenuRequestDto {
 
-    private final Long storeId;
-
     @NotBlank(message = "메뉴명을 입력해주세요.")
     private final String name;
 
@@ -19,8 +17,8 @@ public class MenuRequestDto {
     @NotNull(message = "가격을 입력해주세요.")
     private final Integer price;
 
-    public MenuRequestDto(Long storeId, String name, String content, Integer price) {
-        this.storeId = storeId;
+    public MenuRequestDto( String name, String content, Integer price) {
+
         this.name = name;
         this.content = content;
         this.price = price;
