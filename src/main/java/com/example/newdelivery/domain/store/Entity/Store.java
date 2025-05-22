@@ -1,15 +1,15 @@
 package com.example.newdelivery.domain.store.Entity;
 
 import com.example.newdelivery.common.baseEntity.BaseEntity;
+import com.example.newdelivery.domain.menu.entity.Menu;
+import com.example.newdelivery.domain.review.entity.Review;
 import com.example.newdelivery.domain.store.Dto.StoreRequestDto;
 import com.example.newdelivery.domain.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.awt.*;
+import java.util.List;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-
+@Builder
 public class Store extends BaseEntity {
 
     @Id
@@ -41,41 +41,35 @@ public class Store extends BaseEntity {
     @Column(nullable = false)
     private LocalTime closeTime;
 
-    @Column(nullable = false)
-    private Long minimumOrder;
-
-    // 한명의 사장이
-    @OneToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
-
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menus = new ArrayList<>();
 
+//    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Review> reviews = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "owner_id")
+    @JsonBackReference
+    private User owner;
 
 
-    public Store(Long id, String name, String content, String address, LocalTime openTime, LocalTime closeTime, Long minimumOrder, User user) {
+    public Store(Long id, String name, String content, String address, LocalTime openTime, LocalTime closeTime, User owner) {
         this.id = id;
         this.name = name;
         this.content = content;
         this.address = address;
         this.openTime = openTime;
         this.closeTime = closeTime;
-        this.minimumOrder = minimumOrder;
-        this.user = user;
+        this.owner = owner;
     }
 
-    public Store(String name, String content, String address, LocalTime openTime, LocalTime closeTime, Long minimumOrder, User user) {
+    public Store(String name, String content, String address, LocalTime openTime, LocalTime closeTime, User owner) {
         this.name = name;
         this.content = content;
         this.address = address;
         this.openTime = openTime;
         this.closeTime = closeTime;
-        this.minimumOrder = minimumOrder;
-        this.user = user;
+        this.owner = owner;
     }
 
     public Store(StoreRequestDto storeRequestDto) {
@@ -84,7 +78,6 @@ public class Store extends BaseEntity {
         this.address = storeRequestDto.getAddress();
         this.openTime = storeRequestDto.getOpenTime();
         this.closeTime = storeRequestDto.getCloseTime();
-        this.minimumOrder = storeRequestDto.getMinimumOrder();
     }
 
     public void update(StoreRequestDto storeRequestDto) {
@@ -93,7 +86,6 @@ public class Store extends BaseEntity {
         this.address = storeRequestDto.getAddress();
         this.openTime = storeRequestDto.getOpenTime();
         this.closeTime = storeRequestDto.getCloseTime();
-        this.minimumOrder = storeRequestDto.getMinimumOrder();
     }
 }
 

@@ -10,6 +10,7 @@ public enum OrderStatus {
     PENDING("주문 확인 전"),
     CANCELED("주문 취소"),
     ACCEPTED("주문 수락"),
-    REJECTED("주문 거절");
+    REJECTED("주문 거절"),
+    ARRIVED("배달 완료");
     private final String description;
 }

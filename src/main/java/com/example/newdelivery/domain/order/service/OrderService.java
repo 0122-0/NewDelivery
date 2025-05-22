@@ -1,7 +1,8 @@
 package com.example.newdelivery.domain.order.service;
 
+import com.example.newdelivery.common.security.CustomUserPrincipal;
 import com.example.newdelivery.domain.menu.entity.Menu;
-import com.example.newdelivery.domain.menu.repository.MenuRepositoy;
+import com.example.newdelivery.domain.menu.repository.MenuRepository;
 import com.example.newdelivery.domain.order.dto.request.OrderCreateRequest;
 import com.example.newdelivery.domain.order.dto.response.OrderResponseDto;
 import com.example.newdelivery.domain.order.dto.response.OrderStatusResponseDto;
@@ -11,19 +12,17 @@ import com.example.newdelivery.domain.order.repository.OrderRepository;
 import com.example.newdelivery.domain.store.Entity.Store;
 import com.example.newdelivery.domain.store.Repository.StoreRepository;
 import com.example.newdelivery.domain.user.entity.User;
+import com.example.newdelivery.domain.user.enums.Role;
 import com.example.newdelivery.domain.user.repository.UserRepository;
 import com.example.newdelivery.global.exception.ApiException;
 import com.example.newdelivery.global.exception.ErrorType;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.usertype.UserType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +31,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
-    private final MenuRepositoy menuRepository;
+    private final MenuRepository menuRepository;
 
     // 사용자 주문 생성
     @Transactional
@@ -48,7 +47,6 @@ public class OrderService {
         Menu menu = menuRepository.findById(dto.getMenuId())
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, ErrorType.INVALID_PARAMETER, "메뉴를 찾을 수 없습니다."));
 
-        List<Menu> menu = menuRepository.findById(menu.getId());
 
          // 가게 영업시간에만 주문 가능
         LocalTime now = LocalTime.now();
@@ -56,27 +54,13 @@ public class OrderService {
             throw new ApiException(HttpStatus.BAD_REQUEST, ErrorType.INVALID_PARAMETER, "영업시간이 아닙니다.");
         }
 
-        // 총 가격
-        int totalOptionPrice = menu.stream()
-                .mapToInt(Menu::getPrice)
-                .sum();
-
-        int totalPrice = (menu.getPrice() + totalOptionPrice) * dto.getQuantity();
-
-        // 가게에서 설정한 최소 주문 금액을 만족해야 주문이 가능
-        if (totalPrice < store.getMinimumOrder()) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, ErrorType.INVALID_PARAMETER, String.format("최소 주문 금액은 %d원입니다.", store.getMinOrderPrice()));
-        }
-
         // 주문 설정
         Order order = Order.builder()
                 .user(user)
                 .store(store)
                 .menu(menu)
-                .quantity(dto.getQuantity())
-                .totalPrice(totalPrice)
-                .orderStatus(OrderStatus.PENDING) // 기본값 설정
-                .updatedAt(LocalDateTime.now())
+                .Price(menu.getPrice())
+                .orderstatus(OrderStatus.PENDING) // 기본값 설정
                 .build();
 
         Order savedOrder = orderRepository.save(order);
@@ -85,37 +69,38 @@ public class OrderService {
                 savedOrder.getId(),
                 store.getId(),
                 savedOrder.getMenu().getId(),
-                savedOrder.getQuantity(),
-                savedOrder.getTotalPrice(),
+                savedOrder.getPrice(),
                 savedOrder.getUpdatedAt()
         );
     }
 
     // 사용자 주문 취소
     @Transactional
-    public OrderStatusResponseDto cancelOrder(Long orderId) {
+    public OrderStatusResponseDto cancelOrder(Long userId, Long orderId) {
+        User user = userRepository.findByIdOrElseThrow(userId);
         Order order = getOrderById(orderId);
 
-        validateUserOrder(order;
+        validateUserOrder(order,user.getId());
 
-        if (!OrderStatus.PENDING.equals(order.getOrderStatus())) {
+        if (!OrderStatus.PENDING.equals(order.getOrderstatus())) {
             throw new ApiException(HttpStatus.BAD_REQUEST, ErrorType.INVALID_PARAMETER,"조리 중인 주문은 취소할 수 없습니다.");
         }
 
         order.updateOrderStatus(OrderStatus.CANCELED);
+
 
         return OrderStatusResponseDto.from(order);
     }
 
     // 오너 주문 상태 변경
     @Transactional
-    public OrderStatusResponseDto changeOrderStatus(Long orderId, OrderStatus newStatus ) {
+    public OrderStatusResponseDto changeOrderStatus(CustomUserPrincipal user, Long orderId, OrderStatus newStatus ) {
 
-        validateOwnerOrder(userType);
+        validateOwnerOrder(user.getUser().getRole());
 
         Order order = getOrderById(orderId);
 
-        if (!OrderStatus.PENDING.equals(order.getOrderStatus())) {
+        if (!OrderStatus.PENDING.equals(order.getOrderstatus())) {
             throw new ApiException(HttpStatus.BAD_REQUEST, ErrorType.INVALID_PARAMETER,"변경할 수 없는 주문입니다.");
         }
 
@@ -133,14 +118,14 @@ public class OrderService {
         }
     }
 
-    private void validateOwnerOrder(UserType userType) {
-        if (!UserType.OWNER.equals(userType)) {
+    private void validateOwnerOrder(Role role) {
+        if (!Role.OWNER.equals(role)) {
             throw new ApiException(HttpStatus.BAD_REQUEST, ErrorType.INVALID_PARAMETER, "오너만 주문 상태를 변경할 수 있습니다.");
         }
     }
 
     private boolean isAllowedChangeStatus(OrderStatus status) {
-        return status == OrderStatus.ACCEPTED || status == OrderStatus.REJECTED;
+        return status == OrderStatus.ARRIVED || status == OrderStatus.REJECTED;
     }
 
     public Order getOrderById(Long orderId) {

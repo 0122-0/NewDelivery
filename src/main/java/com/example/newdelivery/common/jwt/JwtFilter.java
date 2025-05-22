@@ -1,5 +1,7 @@
 package com.example.newdelivery.common.jwt;
 
+import com.example.newdelivery.common.security.CustomUserDetailsService;
+import com.example.newdelivery.common.security.CustomUserPrincipal;
 import com.example.newdelivery.domain.user.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -10,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 
@@ -18,6 +22,7 @@ import java.io.IOException;
 public class JwtFilter implements Filter {
 
     private final JwtUtil jwtUtil;
+    private final CustomUserDetailsService customUserDatailsService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -54,11 +59,18 @@ public class JwtFilter implements Filter {
                 return;
             }
 
+            String email = claims.get("email", String.class);
             Role userRole = Role.valueOf(claims.get("userRole", String.class));
 
-            httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
-            httpRequest.setAttribute("email", claims.get("email"));
-            httpRequest.setAttribute("userRole", claims.get("userRole"));
+//            httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
+//            httpRequest.setAttribute("email", claims.get("email"));
+//            httpRequest.setAttribute("userRole", claims.get("userRole"));
+
+            CustomUserPrincipal userDetails = (CustomUserPrincipal) customUserDatailsService.loadUserByUsername(email);
+
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
             if (url.startsWith("/admin")) {
                 // 관리자 권한이 없는 경우 403을 반환합니다.

@@ -7,6 +7,7 @@ import com.example.newdelivery.domain.user.entity.User;
 import com.example.newdelivery.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public SignUpResponseDto signUp(String email, String password, String name, String nickname, String phone, String address, String role){
@@ -30,11 +32,17 @@ public class UserService {
 
         User findUserById = userRepository.findByIdOrElseThrow(id);
 
-        if(!findUserById.getPassword().equals(oldPassword)) {
-            throw new IllegalArgumentException("기존 비밀 번호가 일치 하지 않습니다.");
+        if(!passwordEncoder.matches(oldPassword, findUserById.getPassword())){
+            throw new RuntimeException("에");
         }
 
-        findUserById.updatePassword(newPassword);
+        if(passwordEncoder.matches(newPassword, findUserById.getPassword())){
+            throw new RuntimeException("에");
+        }
+
+        String encodedPassword = passwordEncoder.encode(newPassword);
+
+        findUserById.updatePassword(encodedPassword);
     }
 
     @Transactional
