@@ -12,7 +12,7 @@
 - MySQL
 
 **API**
-- Excel
+- 구글 스프레드시트
 
 **ERD**
 - erdcloud
@@ -36,3 +36,26 @@
     - **총 2개의 검색 API 가 존재해야한다.**
         - v1 API 는 기존에 Cache 가 적용되지 않은 API 이고, (`/api/v1/boards/search` )
         ~~~~기본적으로 v2는 Local Memory Cache가 적용되어야함
+
+ - [ ]  **성능테스트를 위해 대용량 Dummy 데이터 적재하기**
+    - **최소 5만건 이상의 데이터를 Insert 할 것 *****
+    - **검색에 사용되는 Database Table 에 Dummy 데이터 Insert 하기**
+
+# 📦 캐시(Cache) 적용 이유 및 전략
+
+## 🔍 검색 API에 캐시(@Cacheable)를 적용한 이유
+
+### ✅ 문제 상황
+- 리뷰 검색 API는 사용자가 반복적으로 유사한 키워드로 요청을 보내는 기능입니다.
+- `LIKE '%keyword%'` 쿼리를 통해 리뷰를 검색하게 되며, 이는 인덱스를 활용하기 어렵고 성능 저하를 유발할 수 있습니다.
+- 특히 동일 키워드/페이지 요청이 자주 발생하는 경우 매번 DB를 조회하는 것은 낭비입니다.
+
+### ✅ 캐시 적용 목적
+- **중복 요청에 대한 빠른 응답** 제공
+- **DB 부하 최소화 및 성능 최적화**
+- **API 응답 속도 향상 → 사용자 경험(UX) 개선**
+
+### ✅ 캐시 적용 방식
+```java
+@Cacheable(value = "reviewSearchCache", key = "#keyword + '_' + #pageable.pageNumber")
+public Page<ReviewResponseDto> searchReviewsV2(String keyword, Pageable pageable) { ... }
