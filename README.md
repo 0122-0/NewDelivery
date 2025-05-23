@@ -36,7 +36,6 @@
     - **총 2개의 검색 API 가 존재해야한다.**
         - v1 API 는 기존에 Cache 가 적용되지 않은 API 이고, (`/api/v1/boards/search` )
         ~~~~기본적으로 v2는 Local Memory Cache가 적용되어야함
-
  - [ ]  **성능테스트를 위해 대용량 Dummy 데이터 적재하기**
     - **최소 5만건 이상의 데이터를 Insert 할 것 *****
     - **검색에 사용되는 Database Table 에 Dummy 데이터 Insert 하기**
