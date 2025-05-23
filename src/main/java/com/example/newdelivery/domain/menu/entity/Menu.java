@@ -45,5 +45,4 @@ public class Menu extends BaseEntity {
         this.price = newPrice;
     }
 
-
 }
