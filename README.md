@@ -36,5 +36,4 @@
     - **총 2개의 검색 API 가 존재해야한다.**
         - v1 API 는 기존에 Cache 가 적용되지 않은 API 이고, (`/api/v1/boards/search` )
         ~~~~기본적으로 v2는 Local Memory Cache가 적용되어야함
-        → 선택 구현 기능을 구현한다면 v2의 Local Memory Cache를 Redis를 이용하기.
-         (`/api/v2/boards/search` )
+      
